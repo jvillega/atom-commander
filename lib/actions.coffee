@@ -311,6 +311,7 @@ class Actions
 
   serversAdd: (fromView=true) =>
     view = @getFocusedView();
+    console.log(view);
 
     if !view?
       return;

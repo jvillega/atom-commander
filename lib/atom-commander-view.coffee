@@ -7,6 +7,7 @@ NewFileDialog = require './dialogs/new-file-dialog'
 NewDirectoryDialog = require './dialogs/new-directory-dialog'
 RenameDialog = require './dialogs/rename-dialog'
 DuplicateFileDialog = require './dialogs/duplicate-file-dialog'
+CompressImagesDialog = require './dialogs/compress-images-dialog'
 FileController = require './controllers/file-controller'
 DirectoryController = require './controllers/directory-controller'
 FTPFileSystem = require './fs/ftp/ftp-filesystem'
@@ -81,9 +82,12 @@ class AtomCommanderView extends View
         @button {tabindex: -1, class: 'btn', style: buttonStyle, click: 'copyDuplicateButton'}, =>
           @span 'F5', {class: 'key text-highlight'}
           @span 'Copy', {outlet: 'F5ButtonLabel'}
-        @button {tabindex: -1, class: 'btn', style: buttonStyle, click: 'moveButton'}, =>
+        # @button {tabindex: -1, class: 'btn', style: buttonStyle, click: 'moveButton'}, =>
+        #   @span 'F6', {class: 'key text-highlight'}
+        #   @span 'Move'
+        @button {tabindex: -1, class: 'btn', style: buttonStyle, click: 'compressImagesButton'}, =>
           @span 'F6', {class: 'key text-highlight'}
-          @span 'Move'
+          @span 'Compress Images'
         @button {tabindex: -1, class: 'btn', style: buttonStyle, click: 'newDirectoryButton'}, =>
           @span 'F7', {class: 'key text-highlight'}
           @span 'New Folder'
@@ -111,7 +115,8 @@ class AtomCommanderView extends View
       'atom-commander:new-file': => @newFileButton();
       'atom-commander:copy': => @copyButton();
       'atom-commander:duplicate': => @duplicateButton();
-      'atom-commander:move': => @moveButton();
+      # 'atom-commander:move': => @moveButton();
+      'atom-commander:compress-images': => @compressImagesButton();
       'atom-commander:new-folder': => @newDirectoryButton();
       'atom-commander:delete': => @deleteButton();
       'atom-commander:focus': => @focusButton();
@@ -373,6 +378,30 @@ class AtomCommanderView extends View
 
   moveButton: ->
     @copyOrMoveButton(true);
+
+  compressImagesButton: ->
+    view = @focusedView
+
+    if view == null
+      return;
+
+    itemView = view.getHighlightedItem();
+
+    if ((itemView == null) or itemView.itemController instanceof FileController)
+      return;
+
+    console.log(@focusedView);
+
+    @main.getMainView()?.hideMenuBar();
+    dialog = new CompressImagesDialog(view);
+    dialog.attach();
+
+    # if itemView.itemController instanceof FileController
+    #   dialog = new RenameDialog(@focusedView, itemView.itemController.getFile());
+    #   dialog.attach();
+    # else if itemView.itemController instanceof DirectoryController
+    #   dialog = new RenameDialog(@focusedView, itemView.itemController.getDirectory());
+    #   dialog.attach();
 
   copyOrMoveButton : (move) ->
     if @focusedView == null
