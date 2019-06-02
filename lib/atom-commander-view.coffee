@@ -390,10 +390,10 @@ class AtomCommanderView extends View
     if ((itemView == null) or itemView.itemController instanceof FileController)
       return;
 
-    console.log(@focusedView);
+    # console.log(@focusedView);
 
     @main.getMainView()?.hideMenuBar();
-    dialog = new CompressImagesDialog(view);
+    dialog = new CompressImagesDialog(view, itemView.itemController.getDirectory());
     dialog.attach();
 
     # if itemView.itemController instanceof FileController

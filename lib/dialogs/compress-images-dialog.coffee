@@ -5,7 +5,7 @@
 module.exports =
 class NewServerDialog extends View
 
-  constructor: (@containerView) ->
+  constructor: (@containerView, @item) ->
     super();
     # @ftpDialog.setParentDialog(@);
     # @sftpDialog.setParentDialog(@);
@@ -17,8 +17,8 @@ class NewServerDialog extends View
       @div "Compress Images", {class: "heading"}
       @div {class: "button-panel block"}, =>
         @div {class: "btn-group"}, =>
-          @button "Yes", {class: "btn selected", outlet: "ftpButton", click: "yesClicked"}
-          @button "No", {class: "btn", outlet: "sftpButton", click: "noClicked"}
+          @button "Yes", {class: "btn selected", outlet: "yesButton", click: "yesClicked"}
+          @button "No", {class: "btn", outlet: "noButton", click: "noClicked"}
       # @div {outlet: "dialogContainer"}, =>
       #   @subview "ftpDialog", new FTPDialog()
       #   @subview "sftpDialog", new SFTPDialog()
@@ -37,10 +37,17 @@ class NewServerDialog extends View
   #   return @getServerManager().getFileSystemWithID(id) != null;
   #
   yesClicked: ->
-    @setSelected(@ftpButton, @ftpDialog);
+    @compressImages();
 
   noClicked: ->
-    return
+    @close();
+
+  close: ->
+    panelToDestroy = @panel;
+    @panel = null;
+    panelToDestroy?.destroy();
+    @containerView.requestFocus();
+
   # ftpClicked: ->
   #   @setSelected(@ftpButton, @ftpDialog);
   #
@@ -67,8 +74,6 @@ class NewServerDialog extends View
   #   server = serverManager.addServer(config);
   #   @containerView.openDirectory(server.getInitialDirectory());
   #
-  # close: ->
-  #   panelToDestroy = @panel;
-  #   @panel = null;
-  #   panelToDestroy?.destroy();
-  #   @containerView.requestFocus();
+
+  compressImages: ->
+    console.log(@item);
