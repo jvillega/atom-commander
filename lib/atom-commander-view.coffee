@@ -380,6 +380,7 @@ class AtomCommanderView extends View
     @copyOrMoveButton(true);
 
   compressImagesButton: ->
+    directory = @getFocusedViewDirectory();
     view = @focusedView
 
     if view == null
@@ -390,24 +391,16 @@ class AtomCommanderView extends View
     if ((itemView == null) or itemView.itemController instanceof FileController)
       return;
 
-    # console.log(@focusedView);
-
     @main.getMainView()?.hideMenuBar();
-    dialog = new CompressImagesDialog(view, itemView.itemController.getDirectory());
+    dialog = new CompressImagesDialog(view, directory);
     dialog.attach();
-
-    # if itemView.itemController instanceof FileController
-    #   dialog = new RenameDialog(@focusedView, itemView.itemController.getFile());
-    #   dialog.attach();
-    # else if itemView.itemController instanceof DirectoryController
-    #   dialog = new RenameDialog(@focusedView, itemView.itemController.getDirectory());
-    #   dialog.attach();
 
   copyOrMoveButton : (move) ->
     if @focusedView == null
       return;
 
     srcView = @focusedView;
+    console.log(srcView);
     dstView = @getOtherView(srcView);
 
     # Do nothing if the src and dst folders are the same.
@@ -548,6 +541,8 @@ class AtomCommanderView extends View
     if directory == null
       return;
 
+    # console.log(directory);
+    # console.log(@focusedView);
     dialog = new NewDirectoryDialog(@focusedView, directory);
     dialog.attach();
 
