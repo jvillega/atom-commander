@@ -386,11 +386,6 @@ class AtomCommanderView extends View
     if view == null
       return;
 
-    itemView = view.getHighlightedItem();
-
-    if ((itemView == null) or itemView.itemController instanceof FileController)
-      return;
-
     @main.getMainView()?.hideMenuBar();
     dialog = new CompressImagesDialog(view, directory);
     dialog.attach();

@@ -1,12 +1,10 @@
-# FTPDialog = require './ftp-dialog'
-# SFTPDialog = require './sftp-dialog'
 {View} = require 'atom-space-pen-views'
 {CompositeDisposable, File, Directory} = require 'atom'
 
 module.exports =
 class NewServerDialog extends View
 
-  constructor: (@containerView, @item) ->
+  constructor: (@view, @item) ->
     super();
 
   @content: ->
@@ -26,7 +24,7 @@ class NewServerDialog extends View
 
   makeBackupDirectory: ->
     options = {};
-    pathUtil = @containerView.directory.getFileSystem().getPathUtil();
+    pathUtil = @view.directory.getFileSystem().getPathUtil();
     path = pathUtil.join(@item.getPath(), 'pictureBackup');
 
     @item.fileSystem.makeDirectory path, (err) =>
@@ -35,13 +33,13 @@ class NewServerDialog extends View
       else
         snapShot = {};
         snapShot.name = name;
-        @containerView.refreshDirectoryWithSnapShot(snapShot);
+        @view.refreshDirectoryWithSnapShot(snapShot);
 
   close: ->
     panelToDestroy = @panel;
     @panel = null;
     panelToDestroy?.destroy();
-    @containerView.requestFocus();
+    @view.requestFocus();
 
   attach: ->
     @panel = atom.workspace.addModalPanel(item: this.element);
