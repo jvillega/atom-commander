@@ -1,25 +1,39 @@
 # TO-DO:
-#   User defined directory name
-#   Copy files into new directory
-#   Move compress lofic to file-system folder
+  # User defined directory name
+    # frontend
+      # styling
+    # backend DONE
+
+  # Copy files into new directory
+  # Move compress lofic to file-system folder
 
 VFile = require '../fs/vfile'
-{View} = require 'atom-space-pen-views'
+{View, TextEditorView} = require 'atom-space-pen-views'
 {CompositeDisposable, File, Directory} = require 'atom'
 
 module.exports =
 class NewServerDialog extends View
 
   constructor: (@view, @item) ->
-    super();
+    super({prompt:'Enter a name for the new directory:'});
 
   @content: ->
-    @div class: "atom-commander-new-server-dialog", =>
+    @div {class: "container"}, =>
       @div "Compress Images", {class: "heading"}
+      @div class: "atom-commander-compress-server-dialog", =>
+        @table =>
+          @tbody =>
+            @tr =>
+              @td "Enter name of backup directory", {class: "text-highlight", style: "width:50%"}
+              @td =>
+                @subview "backupEditor", new TextEditorView(mini: true)
       @div {class: "button-panel block"}, =>
         @div {class: "btn-group"}, =>
           @button "Yes", {class: "btn selected", outlet: "yesButton", click: "yesClicked"}
           @button "No", {class: "btn", outlet: "noButton", click: "close"}
+
+  # initialize: ->
+  #   @nameEditor.attr("tabindex", 1);
 
   yesClicked: ->
     @compressImages();
@@ -85,7 +99,7 @@ class NewServerDialog extends View
   makeBackupDirectory: ->
     options = {};
     pathUtil = @view.directory.getFileSystem().getPathUtil();
-    path = pathUtil.join(@item.getPath(), 'pictureBackup');
+    path = pathUtil.join(@item.getPath(), @getName());
 
     @item.fileSystem.makeDirectory path, (err) =>
       if err?
@@ -94,6 +108,9 @@ class NewServerDialog extends View
         snapShot = {};
         snapShot.name = name;
         @view.refreshDirectoryWithSnapShot(snapShot);
+
+  getName: ->
+    return @backupEditor.getModel().getText().trim();
 
   close: ->
     panelToDestroy = @panel;
