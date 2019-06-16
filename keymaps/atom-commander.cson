@@ -18,7 +18,7 @@
   'f4': 'atom-commander:new-file'
   'f5': 'atom-commander:copy'
   'shift-f5': 'atom-commander:duplicate'
-  'f6': 'atom-commander:move'
+  'f6': 'atom-commander:compress-images'
   'f7': 'atom-commander:new-folder'
   'f8': 'atom-commander:delete'
   'tab': 'atom-commander:focus-other-view'
