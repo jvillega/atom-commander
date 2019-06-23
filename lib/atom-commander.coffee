@@ -53,11 +53,6 @@ module.exports = AtomCommander =
       description: "Remove a cached file after it was closed and successfully uploaded."
       type: "boolean"
       default: true
-    compressImages:
-      type: "object"
-      description: "Enter your Tiny PNG API Here"
-      type: "string"
-      default: "None"
 
   activate: (@state) ->
     @loadState();

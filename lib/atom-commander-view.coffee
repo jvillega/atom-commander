@@ -7,7 +7,7 @@ NewFileDialog = require './dialogs/new-file-dialog'
 NewDirectoryDialog = require './dialogs/new-directory-dialog'
 RenameDialog = require './dialogs/rename-dialog'
 DuplicateFileDialog = require './dialogs/duplicate-file-dialog'
-CompressImagesDialog = require './dialogs/compress-images-dialog'
+RecursiveSearchDialog = require './dialogs/recursive-search-dialog'
 FileController = require './controllers/file-controller'
 DirectoryController = require './controllers/directory-controller'
 FTPFileSystem = require './fs/ftp/ftp-filesystem'
@@ -85,9 +85,9 @@ class AtomCommanderView extends View
         # @button {tabindex: -1, class: 'btn', style: buttonStyle, click: 'moveButton'}, =>
         #   @span 'F6', {class: 'key text-highlight'}
         #   @span 'Move'
-        @button {tabindex: -1, class: 'btn', style: buttonStyle, click: 'compressImagesButton'}, =>
+        @button {tabindex: -1, class: 'btn', style: buttonStyle, click: 'recursiveSearchButton'}, =>
           @span 'F6', {class: 'key text-highlight'}
-          @span 'Compress Images'
+          @span 'Recursive Search'
         @button {tabindex: -1, class: 'btn', style: buttonStyle, click: 'newDirectoryButton'}, =>
           @span 'F7', {class: 'key text-highlight'}
           @span 'New Folder'
@@ -116,7 +116,7 @@ class AtomCommanderView extends View
       'atom-commander:copy': => @copyButton();
       'atom-commander:duplicate': => @duplicateButton();
       # 'atom-commander:move': => @moveButton();
-      'atom-commander:compress-images': => @compressImagesButton();
+      'atom-commander:recursive-search': => @recursiveSearchButton();
       'atom-commander:new-folder': => @newDirectoryButton();
       'atom-commander:delete': => @deleteButton();
       'atom-commander:focus': => @focusButton();
@@ -379,7 +379,7 @@ class AtomCommanderView extends View
   moveButton: ->
     @copyOrMoveButton(true);
 
-  compressImagesButton: ->
+  recursiveSearchButton: ->
     directory = @getFocusedViewDirectory();
     view = @focusedView
 
@@ -387,7 +387,7 @@ class AtomCommanderView extends View
       return;
 
     @main.getMainView()?.hideMenuBar();
-    dialog = new CompressImagesDialog(view, directory);
+    dialog = new RecursiveSearchDialog(view, directory);
     dialog.attach();
 
   copyOrMoveButton : (move) ->
