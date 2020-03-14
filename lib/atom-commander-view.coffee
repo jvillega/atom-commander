@@ -7,7 +7,6 @@ NewFileDialog = require './dialogs/new-file-dialog'
 NewDirectoryDialog = require './dialogs/new-directory-dialog'
 RenameDialog = require './dialogs/rename-dialog'
 DuplicateFileDialog = require './dialogs/duplicate-file-dialog'
-RecursiveSearchDialog = require './dialogs/recursive-search-dialog'
 FileController = require './controllers/file-controller'
 DirectoryController = require './controllers/directory-controller'
 FTPFileSystem = require './fs/ftp/ftp-filesystem'
@@ -82,12 +81,9 @@ class AtomCommanderView extends View
         @button {tabindex: -1, class: 'btn', style: buttonStyle, click: 'copyDuplicateButton'}, =>
           @span 'F5', {class: 'key text-highlight'}
           @span 'Copy', {outlet: 'F5ButtonLabel'}
-        # @button {tabindex: -1, class: 'btn', style: buttonStyle, click: 'moveButton'}, =>
-        #   @span 'F6', {class: 'key text-highlight'}
-        #   @span 'Move'
-        @button {tabindex: -1, class: 'btn', style: buttonStyle, click: 'recursiveSearchButton'}, =>
+        @button {tabindex: -1, class: 'btn', style: buttonStyle, click: 'moveButton'}, =>
           @span 'F6', {class: 'key text-highlight'}
-          @span 'Recursive Search'
+          @span 'Move'
         @button {tabindex: -1, class: 'btn', style: buttonStyle, click: 'newDirectoryButton'}, =>
           @span 'F7', {class: 'key text-highlight'}
           @span 'New Folder'
@@ -115,8 +111,7 @@ class AtomCommanderView extends View
       'atom-commander:new-file': => @newFileButton();
       'atom-commander:copy': => @copyButton();
       'atom-commander:duplicate': => @duplicateButton();
-      # 'atom-commander:move': => @moveButton();
-      'atom-commander:recursive-search': => @recursiveSearchButton();
+      'atom-commander:move': => @moveButton();
       'atom-commander:new-folder': => @newDirectoryButton();
       'atom-commander:delete': => @deleteButton();
       'atom-commander:focus': => @focusButton();
@@ -379,23 +374,11 @@ class AtomCommanderView extends View
   moveButton: ->
     @copyOrMoveButton(true);
 
-  recursiveSearchButton: ->
-    directory = @getFocusedViewDirectory();
-    view = @focusedView
-
-    if view == null
-      return;
-
-    @main.getMainView()?.hideMenuBar();
-    dialog = new RecursiveSearchDialog(view, directory);
-    dialog.attach();
-
   copyOrMoveButton : (move) ->
     if @focusedView == null
       return;
 
     srcView = @focusedView;
-    console.log(srcView);
     dstView = @getOtherView(srcView);
 
     # Do nothing if the src and dst folders are the same.
@@ -536,8 +519,6 @@ class AtomCommanderView extends View
     if directory == null
       return;
 
-    # console.log(directory);
-    # console.log(@focusedView);
     dialog = new NewDirectoryDialog(@focusedView, directory);
     dialog.attach();
 
